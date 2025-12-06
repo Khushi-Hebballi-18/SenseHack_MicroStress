@@ -191,3 +191,20 @@ def classify_tsi_level(score: float) -> str:
     if score < 90:
         return "Overloaded moment"
     return "Highly overwhelmed"
+
+def analyze_typing_session(events: List[KeyEvent]) -> Dict[str, object]:
+    """
+    High-level wrapper called by backend/API.
+    Produces a clean, JSON-serializable dictionary.
+    """
+    features = extract_typing_features(events)
+    pause_label = classify_pause_pattern(features)
+    tsi_score = compute_tsi(features)
+    tsi_label = classify_tsi_level(tsi_score)
+
+    return {
+        "features": features,
+        "pause_pattern": pause_label,
+        "tsi_score": tsi_score,
+        "tsi_label": tsi_label
+    }

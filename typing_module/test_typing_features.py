@@ -54,3 +54,16 @@ if __name__ == "__main__":
     print("\n=== Typing Stress Index (TSI) ===")
     print(f"TSI Score: {tsi_score}")
     print(f"TSI Level: {tsi_label}")
+
+from typing_features import (
+    KeyEvent,
+    analyze_typing_session
+)
+
+if __name__ == "__main__":
+    events = build_dummy_events()
+
+    results = analyze_typing_session(events)
+
+    print("\n=== Final Analysis Output ===")
+    print(results)
