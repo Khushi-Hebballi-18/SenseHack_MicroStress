@@ -2,10 +2,8 @@
 
 from typing_features import (
     KeyEvent,
-    extract_typing_features,
-    classify_pause_pattern,
-    compute_tsi,
-    classify_tsi_level,
+    analyze_typing_session,
+    dicts_to_keyevents,
 )
 
 
@@ -36,34 +34,30 @@ def build_dummy_events():
     return events
 
 
-if __name__ == "__main__":
+def run_direct_test():
     events = build_dummy_events()
-
-    features = extract_typing_features(events)
-    print("=== Typing Features ===")
-    for k, v in features.items():
-        print(f"{k}: {v}")
-
-    pause_pattern = classify_pause_pattern(features)
-    print("\n=== Pause Pattern Classification ===")
-    print(pause_pattern)
-
-    tsi_score = compute_tsi(features)
-    tsi_label = classify_tsi_level(tsi_score)
-
-    print("\n=== Typing Stress Index (TSI) ===")
-    print(f"TSI Score: {tsi_score}")
-    print(f"TSI Level: {tsi_label}")
-
-from typing_features import (
-    KeyEvent,
-    analyze_typing_session
-)
-
-if __name__ == "__main__":
-    events = build_dummy_events()
-
     results = analyze_typing_session(events)
 
-    print("\n=== Final Analysis Output ===")
-    print(results)
+    print("\n=== Direct KeyEvent Test ===")
+    for k, v in results.items():
+        print(f"{k}: {v}")
+
+
+def run_json_like_test():
+    raw = [
+        {"timestamp": 0.0, "key": "h", "event_type": "down"},
+        {"timestamp": 0.05, "key": "h", "event_type": "up"},
+        {"timestamp": 0.10, "key": "e", "event_type": "down"},
+        {"timestamp": 0.15, "key": "e", "event_type": "up"},
+    ]
+    events = dicts_to_keyevents(raw)
+    results = analyze_typing_session(events)
+
+    print("\n=== JSON-like Events Test ===")
+    for k, v in results.items():
+        print(f"{k}: {v}")
+
+
+if __name__ == "__main__":
+    run_direct_test()
+    run_json_like_test()
